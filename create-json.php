@@ -4,7 +4,6 @@
 ## HEADERS DE CSV ##
 ####################
 
-// output headers so that the file is downloaded rather than displayed
 header('Content-Type: application/json; charset=UTF-8');
 header('Content-Disposition: attachment; filename='.$group_name.'-'.date('dmY', mktime()).'.xls');
 
@@ -44,7 +43,7 @@ if ($user) {
 		//$since = strtotime($since);
 		//$offset = 0;
 		
-		$limit = 1500;
+		$limit = 750;
 		$user_groups = array();
 		//$data = $facebook->api("/".$grupo."/feed/?limit=$limit&since=$since");
 		$data = $facebook->api("/".$grupo."/feed/?limit=$limit");

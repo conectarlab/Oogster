@@ -3,22 +3,18 @@
 require 'src/facebook.php';
 require 'inc/config.php';
 
-// Create our Application instance (replace this with your appId and secret).
 $facebook = new Facebook(array(
 	'appId'  => $appId,
 	'secret' => $secret,
 ));
 
-// Get User ID
 $user = $facebook->getUser();
-
 $debug = false;
 
 // GRUPO SELECCIONADO
 $grupo = $_GET['grupo'];
 
 if ($user) {
-	//$logoutUrl = $facebook->getLogoutUrl(array( 'next' => ( 'http://'.$_SERVER['SERVER_NAME'].'/logout.php') ));
 	$logoutUrl = $facebook->getLogoutUrl();
 } else {
 	$params = array('scope' => 'user_groups,friends_groups');
@@ -29,12 +25,12 @@ if ($user) {
 	try {
 		// Proceed knowing you have a logged in user who's authenticated.
 		$user_profile = $facebook->api('/me');
-		// $user_groups = $facebook->api( '/219652654807851/feed/?limit=320');
 	} catch (FacebookApiException $e) {
 		error_log($e);
 		$user = null;
 	}
 	
+	// Recuperamos listado de grupos, o título de grupo
 	if(!isset($grupo)) { 
 		$user_groups = $facebook->api('/me/groups'); 
 	} else {
@@ -77,26 +73,36 @@ if ($user) {
 		} else {
 ?>
 		<h3>Descargando contenido de "<?php echo $group_title ?>"</h3>
-		<div><em>Descargar <b><a href="create-csv.php?grupo=<?php echo $grupo ?>">Valores separados por coma, .csv</a></b></em></div>
-	<?php	/* <div><em>Descargar <b><a href="create-xls.php?grupo=<?php echo $grupo  ?>">Microsoft Excel, .xls</a></b></em></div> */ ?>
-		<div><em>Descargar <b><a href="create-xls2.php?grupo=<?php echo $grupo ?>">Microsoft Excel, .xls</a></b></em></div>
-		<div><em>Descargar <b><a href="create-json.php?grupo=<?php echo $grupo ?>">JSON</a></b></em></div>
+		<ul>
+			<li><a href="create-xls2.php?grupo=<?php echo $grupo ?>">Descargar Microsoft Excel, .xls</a></li>
+			<li><a href="create-csv.php?grupo=<?php echo $grupo ?>">Descargar Valores separados por coma, .csv</a></li>
+			<li><a href="create-json.php?grupo=<?php echo $grupo ?>">Descargar JSON</a></li>
+		</ul>
 <?php
 		}
 ?>
-		<a href="<?php echo $logoutUrl; ?>" class="logout">Cerrar sesión</a>
+		
 <?php 
 	if ($debug): ?>
-		<h3>Your User Object (/me)</h3>
+		<h4>Your User Object (/me)</h4>
 		<pre><?php print_r($user_profile); ?></pre>
-		<h3>PHP Session</h3>
+		<h4>PHP Session</h4>
 		<pre><?php print_r($_SESSION); ?></pre>
 <?php endif; ?>	
 <?php 
 	endif; ?>
 		<div class="disclaimer">
-			<small>El archivo devuelto no contendrá información sobre archivos cargados en el grupo. <br />En tanto esta aplicación está en desarrollo, el número de ítems máximo a descargar de un grupo está limitado a 1500.</small>
+			<small>El archivo devuelto no contendrá información sobre archivos cargados en el grupo. <br />
+			En tanto esta aplicación está en desarrollo, el número de ítems máximo a descargar de un grupo está limitado a 750. <br />
+			No se guarda ningún tipo de información personal en nuestros servidores. La información es cargada y devuelta al usuario directamente.</small>
+			<h3>Problemas conocidos</h3>
+			<ul>
+				<li>Si el grupo tiene muchos mensajes, Facebook puede devolver "Error 1: An unknown error occurred". <ul><li>Posible solución: En algunos casos, desloguearse de FB y volver a probar lo soluciona.</li></ul></li>
+				
+			
+			</ul>
 		</div>
+		<small><a href="<?php echo $logoutUrl; ?>" class="logout">Cerrar sesión</a></small>
 	</div>
 </body>
 </html>

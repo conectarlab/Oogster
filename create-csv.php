@@ -10,56 +10,46 @@ function simpleText($s) {
 require 'src/facebook.php';
 require 'inc/config.php';
 
-// Create our Application instance (replace this with your appId and secret).
 $facebook = new Facebook(array(
 	'appId'  => $appId,
 	'secret' => $secret,
 ));
 
-// Get User ID
 $user = $facebook->getUser();
 $grupo = $_GET['grupo'];
 
-// Login or logout url will be needed depending on current user state.
 if ($user) {
-//  $logoutUrl = $facebook->getLogoutUrl();
-  $logoutUrl = $facebook->getLogoutUrl(array( 'next' => ( 'http://'.$_SERVER['SERVER_NAME'].'/logout.php') ));
-
+	$logoutUrl = $facebook->getLogoutUrl(array( 'next' => ( 'http://'.$_SERVER['SERVER_NAME'].'/logout.php') ));
 } else {
-  $params = array('scope' => 'user_groups,friends_groups');
-  $loginUrl = $facebook->getLoginUrl($params);
-  die;
+	$params = array('scope' => 'user_groups,friends_groups');
+	$loginUrl = $facebook->getLoginUrl($params);
+	die;
 }
 
 if ($user) {
 	try {
-	
 		//$since = '2012-07-02T11:37:46+0000';
 		//$since = strtotime($since);
 		//$offset = 0;
-		
-		$limit = 1500;
+		$limit = 750;
 		$user_groups = array();
 		//$data = $facebook->api("/".$grupo."/feed/?limit=$limit&since=$since");
 		$data = $facebook->api("/".$grupo."/feed/?limit=$limit");
 		$user_groups = array_merge($user_groups, $data["data"]);
-		
 		$group_name = $facebook->api("/".$grupo."/");
 		$group_name = simpleText($group_name['name']);	
-
 	} catch (FacebookApiException $e) {
 		error_log($e);
 		$user = null;
 	}
 
-    // create a file pointer connected to the output stream
+    // Creamos un pointer conectado al stream de salida
     $output = fopen('php://output', 'w');
 
-    // output the column headings
+    // Agregamos el título de las columnas
     fputcsv($output, array('id','id_fb','from','from_id','message','picture','link','name','caption','description','type','created_time','updated_time','comments','likes'), "\t" );
 
 	$i = 1;
-
 	foreach($user_groups as $item) {
         //$each_note = $item['data'][$i];
         $fields = array (

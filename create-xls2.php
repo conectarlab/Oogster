@@ -3,13 +3,11 @@
 // Cargar PHPExcel
 require_once dirname(__FILE__) . '/PHPExcel/PHPExcel.php';
 $objPHPExcel = new PHPExcel();
-//$sheet = $objPHPExcel->getActiveSheet();
 
 // FACEBOOK SDK PHP <3
 require 'src/facebook.php';
 require 'inc/config.php';
 
-// Create our Application instance (replace this with your appId and secret).
 $facebook = new Facebook(array(
 	'appId'  => $appId,
 	'secret' => $secret,
@@ -27,34 +25,19 @@ function simpleText($s) {
     return trim($s, '_');
 }
 
-// Login or logout url will be needed depending on current user state.
-if ($user) {
-//  $logoutUrl = $facebook->getLogoutUrl();
-  $logoutUrl = $facebook->getLogoutUrl(array( 'next' => ( 'http://'.$_SERVER['SERVER_NAME'].'/logout.php') ));
-
-} else {
-  $params = array('scope' => 'user_groups,friends_groups');
-  $loginUrl = $facebook->getLoginUrl($params);
-  die;
-}
-
 if ($user) {
 	try {
-
 		//$since = '2012-07-02T11:37:46+0000';
 		//$since = strtotime($since);
 		//$offset = 0;
-
-		$limit = 1500;
+		$limit = 750;
 		$user_groups = array();
 		//$data = $facebook->api("/".$grupo."/feed/?limit=$limit&since=$since");
 		$data = $facebook->api("/".$grupo."/feed/?limit=$limit");
 		if(!is_array($data['data'])) { print_r($data); die; }
 		$user_groups = array_merge($user_groups, $data["data"]);
-
 		$group_name = $facebook->api("/".$grupo."/");
 		$group_name = simpleText($group_name['name']);	
-
 	} catch (FacebookApiException $e) {
 		error_log($e);
 		$user = null;
@@ -73,20 +56,18 @@ if ($user) {
 
 	// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 	$objPHPExcel->setActiveSheetIndex(0);
-	
-	$celltype_plain_text = PHPExcel_Cell_DataType::TYPE_STRING2;
-	
-	$header =  array('ID','Facebook ID','De','De (ID)','Mensaje','Imagen','Enlace','Nombre','Epígrafe','Descripción','Tipo','Fecha de creación','Fecha de actualización','Comentarios','Me gusta');
+	$celltype_plain_text	= PHPExcel_Cell_DataType::TYPE_STRING2;
+	$header					= array('ID','Facebook ID','De','De (ID)','Mensaje','Imagen','Enlace','Nombre','Epígrafe','Descripción','Tipo','Fecha de creación','Fecha de actualización','Comentarios','Me gusta');
 
-	$columnID = 'A';
-	$rowID = 1;
+	$columnID	= 'A';
+	$rowID		= 1;
 	foreach($header as $columnValue) {
 		$objPHPExcel->getActiveSheet()->setCellValueExplicit($columnID.$rowID, $columnValue, $celltype_plain_text);
 		$columnID++;
 	}
-	$rowID = 2;
 	
-	$i = count($user_groups);
+	$rowID	= 2;
+	$i		= count($user_groups);
 	foreach($user_groups as $item) {
         //$each_note = $item['data'][$i];
         $fields = array (
@@ -106,10 +87,7 @@ if ($user) {
                         'comments' 		=> $item['comments']['count'],
                         'likes' 		=> $item['likes']['count']
         );
-		
-	//	$fields = array_unshift($fields, $i);
-		$sheet[] = $fields;
-				
+					
 		$columnID = 'A';
 		foreach($fields as $columnValue) {
 			$objPHPExcel->getActiveSheet()->setCellValueExplicit($columnID.$rowID, $columnValue, $celltype_plain_text);
@@ -119,23 +97,15 @@ if ($user) {
 		$i--;
 	}
 	
-	//$objPHPExcel->getActiveSheet()->fromArray($sheet);
-
-	####################
+	######################
 	## HEADERS DE EXCEL ##
-	####################
+	######################
 
-	// We'll be outputting an excel file
 	header('Content-type: application/vnd.ms-excel');
-
-	// It will be called file.xls
 	header('Content-Disposition: attachment; filename='.$group_name.'-'.date('dmY', mktime()).'.xls');
 	
 	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-	//$objWriter->save(str_replace('.php', '.xls', __FILE__));
 	$objWriter->save('php://output');
-	
-	
 
 }
 ?>
