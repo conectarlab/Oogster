@@ -5,7 +5,7 @@ require 'inc/config.php';
 
 // Create our Application instance (replace this with your appId and secret).
 $facebook = new Facebook(array(
-	'appId'  => $appID,
+	'appId'  => $appId,
 	'secret' => $secret,
 ));
 
@@ -17,9 +17,9 @@ $debug = false;
 // GRUPO SELECCIONADO
 $grupo = $_GET['grupo'];
 
-
 if ($user) {
-	$logoutUrl = $facebook->getLogoutUrl(array( 'next' => ( 'http://'.$_SERVER['SERVER_NAME'].'/logout.php') ));
+	//$logoutUrl = $facebook->getLogoutUrl(array( 'next' => ( 'http://'.$_SERVER['SERVER_NAME'].'/logout.php') ));
+	$logoutUrl = $facebook->getLogoutUrl();
 } else {
 	$params = array('scope' => 'user_groups,friends_groups');
 	$loginUrl = $facebook->getLoginUrl($params);

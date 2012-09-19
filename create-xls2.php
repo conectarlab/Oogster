@@ -11,7 +11,7 @@ require 'inc/config.php';
 
 // Create our Application instance (replace this with your appId and secret).
 $facebook = new Facebook(array(
-	'appId'  => $appID,
+	'appId'  => $appId,
 	'secret' => $secret,
 ));
 
@@ -21,7 +21,7 @@ $user = $facebook->getUser();
 $grupo = $_GET['grupo'];
 
 function simpleText($s) {
-    $rpl = array("À" => 'A', "Á" => 'A', "Â" => 'A', "Ã" => 'A', "Ä" => 'A', "Å" => 'A',"à" => 'a', "á" => 'a', "â" => 'a', "ã" => 'a', "ä" => 'a', "å" => 'a',"Ò" => 'O', "Ó" => 'O', "Ô" => 'O', "Õ" => 'O', "Ö" => 'O', "Ø" => 'O',"ò" => 'o', "ó" => 'o', "ô" => 'o', "õ" => 'o', "ö" => 'o', "ø" => 'o',"È" => 'E', "É" => 'E', "Ê" => 'E', "Ë" => 'E',"è" => 'e', "é" => 'e', "ê" => 'e', "ë" => 'e',"Ç" => 'C',"ç" => 'c',"Ì" => 'I', "Í" => 'I', "Î" => 'I', "Ï" => 'I',"ì" => 'i', "í" => 'i', "î" => 'i', "ï" => 'i',"Ù" => 'U', "Ú" => 'U', "Û" => 'U', "Ü" => 'U',"ù" => 'u', "ú" => 'u', "û" => 'u', "ü" => 'u',"Ÿ" => 'Y',"ÿ" => 'y',"Ñ" => 'N',"ñ" => 'n');
+    $rpl = array("Ã€" => 'A', "Ã" => 'A', "Ã‚" => 'A', "Ãƒ" => 'A', "Ã„" => 'A', "Ã…" => 'A',"Ã " => 'a', "Ã¡" => 'a', "Ã¢" => 'a', "Ã£" => 'a', "Ã¤" => 'a', "Ã¥" => 'a',"Ã’" => 'O', "Ã“" => 'O', "Ã”" => 'O', "Ã•" => 'O', "Ã–" => 'O', "Ã˜" => 'O',"Ã²" => 'o', "Ã³" => 'o', "Ã´" => 'o', "Ãµ" => 'o', "Ã¶" => 'o', "Ã¸" => 'o',"Ãˆ" => 'E', "Ã‰" => 'E', "ÃŠ" => 'E', "Ã‹" => 'E',"Ã¨" => 'e', "Ã©" => 'e', "Ãª" => 'e', "Ã«" => 'e',"Ã‡" => 'C',"Ã§" => 'c',"ÃŒ" => 'I', "Ã" => 'I', "ÃŽ" => 'I', "Ã" => 'I',"Ã¬" => 'i', "Ã­" => 'i', "Ã®" => 'i', "Ã¯" => 'i',"Ã™" => 'U', "Ãš" => 'U', "Ã›" => 'U', "Ãœ" => 'U',"Ã¹" => 'u', "Ãº" => 'u', "Ã»" => 'u', "Ã¼" => 'u',"Å¸" => 'Y',"Ã¿" => 'y',"Ã‘" => 'N',"Ã±" => 'n');
     $s = preg_replace('`\s+`', '_', strtr($s, $rpl));
     $s = strtolower(preg_replace('`_+`', '_', preg_replace('`[^-_A-Za-z0-9]`', '', $s)));
     return trim($s, '_');
@@ -65,7 +65,7 @@ if ($user) {
 								->setLastModifiedBy("Conectar Lab.")
 								->setTitle('Archivo del grupo "'.$group_name['name'].'"')
 								->setSubject('Archivo del grupo "'.$group_name['name'].'"')
-								->setDescription('Archivo del grupo de Facebook "'.$group_name['name'].'", generado por la aplicación creada por Conectar Lab')
+								->setDescription('Archivo del grupo de Facebook "'.$group_name['name'].'", generado por la aplicaciÃ³n creada por Conectar Lab')
 								->setKeywords("facebook conectarlab grupo");
 
 	// Rename worksheet
@@ -74,10 +74,17 @@ if ($user) {
 	// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 	$objPHPExcel->setActiveSheetIndex(0);
 	
-	$sheet = array();
-	$sheet[] =  array('id','id_fb','from','from_id','message','picture','link','name','caption','description','type','created_time','updated_time','comments','likes');
+	$celltype_plain_text = PHPExcel_Cell_DataType::TYPE_STRING2;
+	
+	$header =  array('ID','Facebook ID','De','De (ID)','Mensaje','Imagen','Enlace','Nombre','EpÃ­grafe','DescripciÃ³n','Tipo','Fecha de creaciÃ³n','Fecha de actualizaciÃ³n','Comentarios','Me gusta');
 
+	$columnID = 'A';
 	$rowID = 1;
+	foreach($header as $columnValue) {
+		$objPHPExcel->getActiveSheet()->setCellValueExplicit($columnID.$rowID, $columnValue, $celltype_plain_text);
+		$columnID++;
+	}
+	$rowID = 2;
 	
 	$i = count($user_groups);
 	foreach($user_groups as $item) {
@@ -102,9 +109,7 @@ if ($user) {
 		
 	//	$fields = array_unshift($fields, $i);
 		$sheet[] = $fields;
-		
-		$celltype_plain_text = PHPExcel_Cell_DataType::TYPE_STRING2;
-		
+				
 		$columnID = 'A';
 		foreach($fields as $columnValue) {
 			$objPHPExcel->getActiveSheet()->setCellValueExplicit($columnID.$rowID, $columnValue, $celltype_plain_text);
