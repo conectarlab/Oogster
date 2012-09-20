@@ -73,11 +73,21 @@ if ($user) {
 		} else {
 ?>
 		<h3>Descargando contenido de "<?php echo $group_title ?>"</h3>
-		<ul>
-			<li><a href="create.php?tipo=xls&grupo=<?php echo $grupo ?>">Descargar Microsoft Excel, .xls</a></li>
-			<li><a href="create.php?tipo=csv&grupo=<?php echo $grupo ?>">Descargar Valores separados por coma, .csv</a></li>
-			<li><a href="create.php?tipo=json&grupo=<?php echo $grupo ?>">Descargar JSON</a></li>
-		</ul>
+		<form action="create.php" method="post">
+			<input type="radio" name="type" value="xls" />Microsoft Excel, .xls<br />
+			<input type="radio" name="type" value="csv" />Valores separados por coma, .csv<br />
+			<input type="radio" name="type" value="json" />JSON <br />
+			
+			<label for="limit">Límite</label>
+			<input type="text" name="limit" /><br />
+			<label for="offset">Márgen</label>
+			<input type="text" name="offset" />
+			
+			<input type="hidden" name="group" value="<?php echo $grupo ?>" />
+			
+			<input type="submit" value="Seleccionar" />
+		</form>
+		
 <?php
 		}
 ?>
@@ -97,7 +107,18 @@ if ($user) {
 			No se guarda ningún tipo de información personal en nuestros servidores. La información es cargada y devuelta al usuario directamente.</small>
 			<h3>Problemas conocidos</h3>
 			<ul>
-				<li>Si el grupo tiene muchos mensajes, Facebook puede devolver "Error 1: An unknown error occurred". <ul><li>Posible solución: En algunos casos, desloguearse de FB y volver a probar lo soluciona.</li></ul></li>
+				<li>Si el grupo tiene muchos mensajes, Facebook puede devolver "Error 1: An unknown error occurred". 
+					<ul>
+						<li>Posible solución: En algunos casos, desloguearse de FB y volver a probar lo soluciona.</li>
+					</ul>
+				</li>
+				<li>El funcionamiento, por asuntos de validación de credenciales de Facebook, a veces es errático. Se puede intentar varias veces hasta que devuelva un archivo.</li>
+				<li>Para grupos muy grandes en algunos casos es mejor seguir el siguiente procedimiento:
+					<ol>
+						<li>Descargar con un límite de por ejemplo 500.</li>
+						<li>Luego, descargar con el mismo límite pero con un márgen de 500, para descargar a partir del elemento 500.</li>
+						<li>Repetir cuantas veces se desee.</li>
+					</ol></li>
 				
 			
 			</ul>

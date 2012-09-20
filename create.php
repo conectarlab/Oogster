@@ -12,8 +12,10 @@ $facebook = new Facebook(array(
 // Get User ID
 $user = $facebook->getUser();
 
-$grupo	= $_GET['grupo'];
-$type	= $_GET['tipo'];
+$group	= $_POST['group'];
+$type	= $_POST['type'];
+$limit	= $_POST['limit'];
+$offset	= $_POST['offset'];
 
 function simpleText($s) {
     $rpl = array("À" => 'A', "Á" => 'A', "Â" => 'A', "Ã" => 'A', "Ä" => 'A', "Å" => 'A',"à" => 'a', "á" => 'a', "â" => 'a', "ã" => 'a', "ä" => 'a', "å" => 'a',"Ò" => 'O', "Ó" => 'O', "Ô" => 'O', "Õ" => 'O', "Ö" => 'O', "Ø" => 'O',"ò" => 'o', "ó" => 'o', "ô" => 'o', "õ" => 'o', "ö" => 'o', "ø" => 'o',"È" => 'E', "É" => 'E', "Ê" => 'E', "Ë" => 'E',"è" => 'e', "é" => 'e', "ê" => 'e', "ë" => 'e',"Ç" => 'C',"ç" => 'c',"Ì" => 'I', "Í" => 'I', "Î" => 'I', "Ï" => 'I',"ì" => 'i', "í" => 'i', "î" => 'i', "ï" => 'i',"Ù" => 'U', "Ú" => 'U', "Û" => 'U', "Ü" => 'U',"ù" => 'u', "ú" => 'u', "û" => 'u', "ü" => 'u',"Ÿ" => 'Y',"ÿ" => 'y',"Ñ" => 'N',"ñ" => 'n');
@@ -26,26 +28,24 @@ if ($user) {
 	try {
 		//$since = '2012-07-02T11:37:46+0000';
 		//$since = strtotime($since);
-		//$offset = 0;
-		$limit = 750;
+		
 		$user_groups = array();
-		//$data = $facebook->api("/".$grupo."/feed/?limit=$limit&since=$since");
-		$data = $facebook->api("/".$grupo."/feed/?limit=$limit");
+		
+		if(empty($limit)) { $limit = 750; }
+		if(!empty($offset)) { $offset = "&offset=".$offset; }
+		
+		$data = $facebook->api("/".$group."/feed/?limit=".$limit.$offset);
 		if(!is_array($data['data'])) { print_r($data); die; }
 		$user_groups = array_merge($user_groups, $data["data"]);
-		$group_name = $facebook->api("/".$grupo."/");
+		$group_name = $facebook->api("/".$group."/");
 		$group_name = simpleText($group_name['name']);	
 	} catch (FacebookApiException $e) {
 		error_log($e);
 		$user = null;
 	}
 
-	if($type == 'xls') {
-	
-		// HEADERS DE EXCEL
-		header('Content-type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment; filename='.$group_name.'-'.date('dmY', mktime()).'.xls');
-		
+	if($type == 'xls' || $type == 'ods') {
+				
 		// Cargar PHPExcel
 		require_once dirname(__FILE__) . '/PHPExcel/PHPExcel.php';
 		$objPHPExcel = new PHPExcel();
@@ -103,14 +103,26 @@ if ($user) {
 			$i--;
 		}
 		
-		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		if($type == 'xls') {
+			// HEADERS DE EXCEL
+			header('Content-type: application/vnd.ms-excel; charset=UTF-8');
+			header('Content-Disposition: attachment; filename='.$group_name.'-'.date('dmY', mktime()).'.xls');
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		/* } elseif($type="ods") {
+			// HEADERS DE OPEN OFFICE
+			header('Content-type: application/vnd.oasis.opendocument.spreadsheet; charset=UTF-8');
+			header('Content-Disposition: attachment; filename='.$group_name.'-'.date('dmY', mktime()).'.ods');
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'OOCalc'); */
+		} 
+		
+
 		$objWriter->save('php://output');
 	
 	} elseif($type == 'csv') {
 		
 		// HEADERS DE CSV
 		header('Content-Type: text/csv; charset=UTF-8');
-		header('Content-Disposition: attachment; filename='.$group_name.'-'.date('dmY', mktime()).'.xls');
+		header('Content-Disposition: attachment; filename='.$group_name.'-'.date('dmY', mktime()).'.csv');
 	
 		// Creamos un pointer conectado al stream de salida
 		$output = fopen('php://output', 'w');
@@ -152,7 +164,7 @@ if ($user) {
 	
 		// HEADERS JSON
 		header('Content-Type: application/json; charset=UTF-8');
-		header('Content-Disposition: attachment; filename='.$group_name.'-'.date('dmY', mktime()).'.xls');
+		header('Content-Disposition: attachment; filename='.$group_name.'-'.date('dmY', mktime()).'.json');
 
 		print_r(json_encode($user_groups));
 	
