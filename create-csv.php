@@ -19,14 +19,6 @@ $user = $facebook->getUser();
 $grupo = $_GET['grupo'];
 
 if ($user) {
-	$logoutUrl = $facebook->getLogoutUrl(array( 'next' => ( 'http://'.$_SERVER['SERVER_NAME'].'/logout.php') ));
-} else {
-	$params = array('scope' => 'user_groups,friends_groups');
-	$loginUrl = $facebook->getLoginUrl($params);
-	die;
-}
-
-if ($user) {
 	try {
 		//$since = '2012-07-02T11:37:46+0000';
 		//$since = strtotime($since);

@@ -74,9 +74,9 @@ if ($user) {
 ?>
 		<h3>Descargando contenido de "<?php echo $group_title ?>"</h3>
 		<ul>
-			<li><a href="create-xls2.php?grupo=<?php echo $grupo ?>">Descargar Microsoft Excel, .xls</a></li>
-			<li><a href="create-csv.php?grupo=<?php echo $grupo ?>">Descargar Valores separados por coma, .csv</a></li>
-			<li><a href="create-json.php?grupo=<?php echo $grupo ?>">Descargar JSON</a></li>
+			<li><a href="create.php?tipo=xls&grupo=<?php echo $grupo ?>">Descargar Microsoft Excel, .xls</a></li>
+			<li><a href="create.php?tipo=csv&grupo=<?php echo $grupo ?>">Descargar Valores separados por coma, .csv</a></li>
+			<li><a href="create.php?tipo=json&grupo=<?php echo $grupo ?>">Descargar JSON</a></li>
 		</ul>
 <?php
 		}
