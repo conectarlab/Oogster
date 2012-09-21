@@ -1,6 +1,69 @@
-body {font-family: 'Lucida Grande', Verdana, Arial, sans-serif;}
-h1 a {text-decoration: none;color: #3b5998;}
-h1 a:hover {text-decoration: underline;}
-ul {list-style:none;}
-ul li {width:50%}
-ul div {width:50%;float:left;height:100px;background-color:#F9F9F9;border-bottom:1px solid #DDD;}
+/* YUI 3.5.0 reset.css (http://developer.yahoo.com/yui/3/cssreset/) - http://cssreset.com */
+html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:normal}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit}input,textarea,select{*font-size:100%}legend{color:#000}#yui3-css-stamp.cssreset{display:none}
+
+html {background:none;}
+body {font-family: 'Dosis','Lucida Grande', Verdana, Arial, sans-serif;background:url(/img/bg.png);font-size:18px;color:#0079C2;}
+
+#main {width:690px;margin:auto;}
+
+header {background-color:#00BBE0;position:relative;height:120px;-webkit-box-shadow: 5px 5px 10px 0px rgba(60, 60, 60, 0.75);box-shadow: 5px 5px 10px 0px rgba(60, 60, 60, 0.75);}
+
+section {width:660px;margin:auto;background-color:#FFF;overflow: hidden;}
+
+section > div {margin:0 44px;padding:45px 0 20px;}
+
+section p {margin:0 0 30px;}
+
+header h1 a {display:block;}
+header h1 a, header  h2 {text-indent:-999em;}
+h3,h4, h3 strong {font-size:22px;color:#00BADF;text-transform:uppercase;font-weight:600;margin:0 0 30px;}
+h4 {font-size:18px;margin:0 0 15px;}
+h3 strong {color:#0079C2;}
+
+ol, ul {list-style-position:inside;}
+
+ul li li,ol li li {margin-left:25px;}
+
+form {}
+
+.disclaimer {margin-top:30px;font-size:14px;}
+.disclaimer p {margin:0 0 15px;}
+
+input {color:#0079C2;}
+
+input[type="text"], select {border:2px solid #0079C2;-webkit-border-radius: 10px;border-radius: 10px;-webkit-appearance: none;font-size:16px;height:26px;}
+select {width:80%;}
+input[type="text"] {width:40px;}
+
+label[for="grupo"] {position:relative;width:80%;}
+label[for="grupo"]:after {content:'<>';
+font:bold 14px "Consolas", monospace;color:#0079C2;-webkit-transform:rotate(90deg);-moz-transform:rotate(90deg);-ms-transform:rotate(90deg);transform:rotate(90deg);right:8px; top:2px;padding:0 0 2px;position:absolute;pointer-events:none;}
+label[for="grupo"]:before {content:'';right:6px; top:1px;width:18px; height:21px;position:absolute;pointer-events:none;display:block;background:#FFF;-webkit-border-radius: 0 8px 8px 0;border-radius: 0 8px 8px 0;}
+
+input[type="text"] {-webkit-border-radius: 10px;border-radius: 10px;}
+
+input[type="submit"] {-webkit-border-radius: 7px;border-radius: 7px;background-color:#0079C2;color:#FFF;text-transform:uppercase;font-size:15px;padding:2px 8px;border:none;cursor:pointer;}
+
+#download {}
+#download label {width:70px;display:inline-block;}
+#download label,
+#download input[type="text"] {margin:4px 0;height:20px;padding:0 4px;}
+
+footer {border-top:2px solid #0079C2;margin-top:15px;padding-top:15px;font-size:14px;text-align:center;}
+footer p{text-align:left;}
+.logout {text-align:right;}
+a{color:#444;text-decoration:none;}
+a:hover{color:#666;text-decoration:underline;}
+
+.sprites{ background:url("img/sprites.png") top left no-repeat; }
+.connect{ width:234px; height:40px; background-position:-10px -10px; text-indent:-999em;display:block;margin-bottom:30px;}
+.oogster{ width:239px; height:40px; background-position:-10px -60px; top:41px;left:49px;position:absolute;}
+.tagline{ width:327px; height:20px; background-position:-10px -110px; right:49px;top:65px;position:absolute; }
+
+
+/* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    select {padding-right:18px}
+}
+
+*:focus {outline:none;}

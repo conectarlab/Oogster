@@ -35,7 +35,9 @@ if ($user) {
 		if(!empty($offset)) { $offset = "&offset=".$offset; }
 		
 		$data = $facebook->api("/".$group."/feed/?limit=".$limit.$offset);
-		if(!is_array($data['data'])) { print_r($data); die; }
+		if(!is_array($data['data'])) { 
+			include('error.php');
+			die; }
 		$user_groups = array_merge($user_groups, $data["data"]);
 		$group_name = $facebook->api("/".$group."/");
 		$group_name = simpleText($group_name['name']);	

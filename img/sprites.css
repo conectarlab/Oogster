@@ -1,0 +1,5 @@
+.sprites{ background:url("sprites.png") top left no-repeat; }
+.connect{ width:234px; height:40px; background-position:-10px -10px; }
+.oogster{ width:239px; height:40px; background-position:-10px -60px; }
+.tagline{ width:327px; height:20px; background-position:-10px -110px; }
+
