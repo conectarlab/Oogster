@@ -1,5 +1,23 @@
 <?php
 
+#########################################################################
+## Oogster: Archivador de grupos de Facebook
+## Copyright (C) 2012  Conectar Lab. (hola@conectarlab.com.ar)
+## 
+## This program is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+## 
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+## 
+## You should have received a copy of the GNU General Public License
+## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#########################################################################
+
 require 'src/facebook.php';
 require 'inc/config.php';
 
@@ -46,9 +64,27 @@ if ($user) {
 	<link rel="stylesheet" type="text/css" href="style.css" media="all" />
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<link href='http://fonts.googleapis.com/css?family=Dosis:400,600' rel='stylesheet' type='text/css'>
+	<meta property="og:title" content="Oogster - Archivador de grupos de Facebook"/>
+	<meta property="og:type" content="product"/>
+	<meta property="og:url" content="http://fb.conectarlab.com.ar"/>
+    <meta property="og:image" content="http://fb.conectarlab.com.ar/img/fbicon.png"/>
+    <meta property="og:description"
+          content="Aplicación para descargar el contenido de un grupoo de Facebook en formato de hoja de cálculos de Microsoft Excel."/>
+	<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35016502-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </head>
 <body>
-	<h1>Archivador de grupos de Facebook</h1>
 	<div id="main">
 		<header>
 			<h1><a class="sprites oogster" href="/">Oogster</a></h1>
@@ -58,6 +94,7 @@ if ($user) {
 			<div>
 <?php 
 	if (!$user): ?>
+		<h5>Oogster es una aplicación para descargar el contenido de un grupoo de Facebook en varios formatos para luego poder procesarlo como se desee.</h5>
 		<h3>Por favor conecte usando Facebook.</h3>
 		<a href="<?php echo $loginUrl; ?>" class="sprites connect">conecte con Facebook</a>
 <?php 	else: ?>
@@ -90,7 +127,7 @@ if ($user) {
 			
 			<label for="limit"><abbr title="El Límite indica cuántos elementos queremos descargar de nuestro grupo">Límite</abbr></label>
 			<input type="text" name="limit" /><br />
-			<label for="offset"><abbr title="El Márgen indica a partir  elementos queremos descargar de nuestro grupo">Márgen</abbr></label>
+			<label for="offset">Margen</label>
 			<input type="text" name="offset" />
 			
 			<input type="hidden" name="group" value="<?php echo $grupo ?>" />
@@ -129,14 +166,14 @@ if ($user) {
 								<li>Repetir cuantas veces se desee.</li>
 							</ol></li>
 						
-						<li>Si encontrás un error o querés consultar cualquier cosa, podés escribirnos a <a href="mailto:vmuro@conectarlab.com.ar?subject=Oogster">vmuro@conectarlab.com.ar</a></li>
+						<li>Si encontrás un error o querés consultar cualquier cosa, podés escribirnos a <a href="mailto:desarrollo@conectarlab.com.ar?subject=Oogster">desarrollo@conectarlab.com.ar</a></li>
 					</ul>
 				</div>
 				<footer>
 				<p>El archivo devuelto no contendrá información sobre archivos cargados en el grupo. <br />
 					En tanto la aplicación está en desarrollo, se recomienda limitar el número de ítems a descargar (por vez) a 750.<br />
 					<strong>No se guarda ningún tipo de información personal en nuestros servidores.</strong> La información es cargada y devuelta al usuario directamente.</p>
-				<a href="http://conectarlab.com.ar">conectar Lab.</a> | <a href="mailto:vmuro@conectarlab.com.ar?subject=Oogster">Contacto técnico</a> | Última actualización: 21.09.2012
+				<a href="http://conectarlab.com.ar">conectar Lab.</a> | <a href="mailto:desarrollo@conectarlab.com.ar?subject=Oogster">Contacto técnico</a> | Última actualización: 21.09.2012
 				<?php if ($user) { ?><div class="logout"><a href="<?php echo $logoutUrl; ?>" class="logout">Cerrar sesión</a><br />(cerrarás sesión en Facebook también)</div><?php } ?>
 				</footer>
 			</div>

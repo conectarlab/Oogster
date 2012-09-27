@@ -36,6 +36,7 @@ if ($user) {
 		
 		$data = $facebook->api("/".$group."/feed/?limit=".$limit.$offset);
 		if(!is_array($data['data'])) { 
+			define('Direct', TRUE);
 			include('error.php');
 			die; }
 		$user_groups = array_merge($user_groups, $data["data"]);
